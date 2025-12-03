@@ -25,6 +25,29 @@ Saves per-bank CSV and a combined CSV dataset.
 
 Handles apps with 0 reviews gracefully.
 
+# PostgreSQL Database Schema
+
+## The cleaned review data is stored in a PostgreSQL database (bank_reviews) with two tables:
+
+## banks Table
+### Column	Type	Description
+bank_id	SERIAL PRIMARY KEY	Unique identifier for each bank
+bank_name	VARCHAR(255)	Short name of the bank
+app_name	VARCHAR(255)	Full name of the bank/app
+
+## reviews Table
+### Column	Type	Description
+review_id	SERIAL PRIMARY KEY	Unique identifier for each review
+bank_id	INT REFERENCES banks(bank_id) ON DELETE CASCADE	Links to the bank
+review_text	TEXT	Cleaned review text
+rating	NUMERIC(2,1)	User rating
+review_date	DATE	Date of the review
+sentiment_label	VARCHAR(20)	Predicted sentiment (POSITIVE/NEGATIVE)
+sentiment_score	NUMERIC(3,2)	Confidence score of the sentiment
+source	VARCHAR(50)	Source of the review (e.g., Google Play)
+
+### Data integrity checks include counting reviews per bank, average ratings, and sentiment distribution to ensure proper insertion.
+
 ## Installation
 
 Clone the repository:
